@@ -1,0 +1,32 @@
+name: ResearchOS tests
+
+on:
+  pull_request:
+    paths:
+      - "researchos/**"
+      - "tests/_researchos/**"
+      - "docs/superpowers/specs/*researchos*"
+      - "docs/superpowers/plans/*researchos*"
+      - ".github/workflows/researchos-tests.yml"
+  push:
+    branches: [main]
+    paths:
+      - "researchos/**"
+      - "tests/_researchos/**"
+      - ".github/workflows/researchos-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - name: Install project dependencies
+        run: uv sync
+      - name: Run ResearchOS tests
+        run: uv run python -m pytest tests/_researchos -q
